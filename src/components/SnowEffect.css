@@ -1,0 +1,23 @@
+.snowflake-icon {
+  position: fixed;
+  top: -20px;
+  color: #fff;
+  z-index: 1000;
+  pointer-events: none; /* Để chuột có thể bấm xuyên qua tuyết */
+  animation-name: fall, rotate; /* Kết hợp rơi và xoay */
+  animation-timing-function: linear, linear;
+  animation-iteration-count: infinite, infinite;
+}
+
+@keyframes fall {
+  0% { top: -20px; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100vh; opacity: 0; }
+}
+
+@keyframes rotate {
+  0% { transform: translateX(0px) rotate(0deg); }
+  50% { transform: translateX(20px) rotate(180deg); } /* Lắc lư nhẹ sang bên */
+  100% { transform: translateX(0px) rotate(360deg); }
+}

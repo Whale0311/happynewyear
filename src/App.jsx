@@ -1140,7 +1140,7 @@ const LetterToMai = ({ isVietnamese, isOpen, onClose }) => {
   
   // --- NỘI DUNG THƯ ---
   const LETTER_CONTENT = isVietnamese 
-    ? "To Bánh Khúc,\n\nManifest món quà tớ tặng cậu không bị lỗi 🙇🏻‍♂️🙏🏻\nTớ có ý tưởng làm cái này từ lúc cậu bảo cậu trao đổi một năm và không về ăn Tết được. Cảm ơn cậu vì những câu chuyện, những lời chia sẻ, lời khuyên và cả những hôm thức khuya nữa 🤣.\nHy vọng nó sẽ giúp cậu xem được pháo hoa, cảm nhận không khí giao thừa với mọi người ở Việt Nam và ngày Tết của cậu sẽ thêm vui vẻ, rộn ràng hơn.\nChúc cậu một năm mới thật hạnh phúc, tràn đầy yêu thương và điều ước của cậu sẽ thành sự thật.\nHappy New Year 2026! ❤️"
+     ? "To Bánh Khúc,\n\nManifest món quà tớ tặng cậu không bị lỗi 🙇🏻‍♂️🙏🏻\nTớ có ý tưởng làm cái này từ lúc cậu bảo cậu trao đổi một năm và không về ăn Tết được. Cảm ơn cậu vì những câu chuyện, những lời chia sẻ, lời khuyên và cả những hôm thức khuya nữa 🤣. Cảm ơn vì đã khiến những ngày rất bình thường của tớ trở nên đáng nhớ.\nHy vọng nó sẽ giúp cậu xem được pháo hoa, cảm nhận không khí giao thừa với mọi người ở Việt Nam và ngày Tết của cậu sẽ thêm vui vẻ, rộn ràng hơn.\nChúc cậu một năm mới thật hạnh phúc, tràn đầy yêu thương và điều ước của cậu sẽ thành sự thật.\nHappy New Year 2026! ❤️"
     : "Maiへ,\n\nあけましておめでとうございます。\nMaiにとって、笑顔あふれる素敵な一年になりますように。\n今年もよろしくお願いします！\n\nHappy New Year 2026! ❤️";
 
   useEffect(() => {
@@ -1225,7 +1225,9 @@ const LetterToMai = ({ isVietnamese, isOpen, onClose }) => {
   );
 };
 const App = () => {
-  const DATE_VN_TET = "2026-02-17T00:00:00+07:00"; //2026-02-17T00:00:00+07:00
+  const DATE_VN_TET = "2026-02-17T00:00:00+07:00"; 
+  const IS_TEST_MODE = false;
+
   const [isVietnamese, setIsVietnamese] = useState(false);
   const [timerData, setTimerData] = useState({ isNewYear: false, days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [selectedWish, setSelectedWish] = useState(null);
@@ -1233,9 +1235,81 @@ const App = () => {
   const [showNameFireworks, setShowNameFireworks] = useState(false);
   const [isLetterOpen, setIsLetterOpen] = useState(false);
   
+  // --- [MỚI] STATE GIEO QUẺ ---
+  const [showLuckyDraw, setShowLuckyDraw] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
+  const [showResult, setShowResult] = useState(false);
+
+  // --- NỘI DUNG QUẺ (ĐÃ CẬP NHẬT: VN CHI TIẾT - JP NGUYÊN BẢN) ---
+  const currentFortune = isVietnamese ? {
+      // === QUẺ VIỆT NAM (Nội dung mới) ===
+      type: 'VN',
+      icon: "🍀",
+      title: "QUẺ SỐ 01 – ĐẠI CÁT",
+      subtitle: "(Thượng Thượng Ký – Vạn Sự Cát Tường)",
+      
+      // Thi Kệ
+      poem_header: "📜 Thi Kệ",
+      poem: "Xuân sang gió thuận mây lành\nHoa khai rực rỡ, công danh sáng ngời\nTrời ban phúc lộc đầy vơi\nTâm thành giữ đức, vận đời hanh thông.",
+      
+      // Tổng Luận
+      general_header: "🔮 Tổng Luận",
+      general_content: "Đây là quẻ Đại Cát, vận khí đang ở thời kỳ hưng thịnh. Mưu sự dễ thành, cầu gì được nấy. Nếu biết khiêm nhường và làm việc thiện, phúc lộc càng tăng thêm. Mọi việc nên tiến hành ngay, chớ chần chừ.",
+      
+      // Chi tiết (Danh sách)
+      details: [
+        { label: "💼 Công Danh", content: "Thuận buồm xuôi gió. Có quý nhân nâng đỡ. Sắp có tin vui." },
+        { label: "💰 Tài Lộc", content: "Tài vận hanh thông, tiền bạc dồi dào. Có thể gặp vận may bất ngờ." },
+        { label: "💖 Tình Duyên", content: "Nhân duyên tốt đẹp. Gia đạo hòa thuận, có tin vui trong nhà." },
+        { label: "📚 Học Hành", content: "Đỗ đạt cao. Kết quả vượt mong đợi." },
+        { label: "🏥 Sức Khỏe", content: "Thân tâm an ổn. Nếu có bệnh sẽ gặp thầy thuốc tốt." },
+        { label: "✈ Xuất Hành", content: "Đi xa bình an, gặp nhiều điều thuận lợi." }
+      ],
+      
+      advice_header: "⚠ Lời Khuyên",
+      advice_content: "Vận tốt đang tới, nhưng chớ tự mãn. Giữ lòng thiện, làm việc chính đáng, phúc càng bền lâu."
+  } : {
+      // === QUẺ NHẬT BẢN (GIỮ NGUYÊN) ===
+      type: 'JP',
+      title_kanji: "第一番　大吉",
+      poem_header: "和歌", 
+      poem_kanji: "春風に\n花さく山の\n楽しさよ",
+      general_header: "運勢",
+      general_content: "七宝の山に入りて、宝を取りて帰るが如し。心正しく行いを慎めば、遂には大いなる福徳を得ん。色に溺れ酒に狂えば凶なり。",
+      details: [
+        { label: "願望", content: "叶う　心長く待て" },
+        { label: "待人", content: "来る　便りあり" },
+        { label: "失物", content: "出る　高い処" },
+        { label: "旅行", content: "いずくも吉" },
+        { label: "商売", content: "利益あり" },
+        { label: "学問", content: "安心して勉学せよ" },
+        { label: "恋愛", content: "誠意を尽くせ" },
+        { label: "転居", content: "さわりなし" },
+        { label: "出産", content: "安産　順調" },
+        { label: "病気", content: "治る　信ぜよ" }
+      ],
+      advice_header: "神の教",
+      advice_content: "天の恵みも、人の行い次第。感謝の心を忘れずに。"
+  };
   // Refs
   const audioRef = useRef(new Audio('/tet-song.mp3')); 
   const fireworkAmbienceRef = useRef(new Audio('/firework_ambience.mp3'));
+
+  // --- [MỚI] LOGIC GIEO QUẺ ---
+  const handleOpenLuckyDraw = () => {
+    setShowLuckyDraw(true);
+    setShowResult(false);
+    setIsShaking(false);
+  };
+
+  const handleShake = () => {
+    if (isShaking) return;
+    setIsShaking(true);
+    setTimeout(() => {
+      setIsShaking(false);
+      setShowResult(true);
+    }, 2000); 
+  };
 
   // Logic Nhạc nền
   useEffect(() => {
@@ -1287,11 +1361,13 @@ const App = () => {
       audio.volume = 0.6; 
       audio.play().catch(e => console.log("Chặn autoplay pháo nền:", e));
     } else {
-      fireworkAmbienceRef.current.pause();
-      fireworkAmbienceRef.current.currentTime = 0;
+      if(fireworkAmbienceRef.current) {
+        fireworkAmbienceRef.current.pause();
+        fireworkAmbienceRef.current.currentTime = 0;
+      }
     }
     return () => {
-      fireworkAmbienceRef.current.pause();
+      if(fireworkAmbienceRef.current) fireworkAmbienceRef.current.pause();
     };
   }, [timerData.isNewYear, isVietnamese]);
 
@@ -1327,6 +1403,7 @@ const App = () => {
         </>
       )}
 
+      {/* --- NÚT SWITCH (GIỮ NGUYÊN CODE CŨ CỦA BẠN) --- */}
       <div style={{ position: 'absolute', top: 20, right: 20, zIndex: 100 }}>
         <LanguageSwitch isVietnamese={isVietnamese} onToggle={() => setIsVietnamese(!isVietnamese)} />
       </div>
@@ -1372,14 +1449,7 @@ const App = () => {
                       </div>
                     ))}
                   </div>
-                  <style>{`
-                  @keyframes appearSlowly {
-                  from { opacity: 0; transform: translateY(20px); }
-                  to { opacity: 1; transform: translateY(0); }
-                  }
-                  `}</style>
               </div>
-
             </div>
           ) : (
             <div style={{ textAlign: 'center', width: '100%' }}>
@@ -1408,10 +1478,178 @@ const App = () => {
       <WishPopup wish={selectedWish} onClose={() => setSelectedWish(null)} />
 
       {/* --- PHÁO HOA MỚI NÂNG CẤP --- */}
-      {/* Chỉ hiện khi là Việt Nam và đã sang Năm Mới */}
       {isVietnamese && timerData.isNewYear && (
         <VipFireworks />
       )}
+
+      {/* --- [MỚI] NÚT GIEO QUẺ (GÓC TRÁI, TRÁNH ĐÈ NHẠC) --- */}
+      <div 
+        onClick={handleOpenLuckyDraw}
+        style={{
+          position: 'fixed', 
+          // Nếu ở VN (có nhạc): cách đáy 120px. Nếu ở Nhật: cách đáy 30px
+          bottom: isVietnamese ? '120px' : '30px', 
+          left: '20px', 
+          zIndex: 1000,
+          width: '70px', height: '70px', borderRadius: '50%',
+          backgroundColor: isVietnamese ? '#da251d' : '#fff', 
+          border: isVietnamese ? '3px solid #fcd34d' : '3px solid #da251d',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 0 15px rgba(0,0,0,0.3)', cursor: 'pointer',
+          animation: 'pulse 2s infinite',
+          transition: 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+        }}
+        className="hover:scale-110"
+      >
+        <span style={{fontSize: '25px'}}>{isVietnamese ? '🎋' : '⛩️'}</span>
+        <span style={{ color: isVietnamese ? '#fcd34d' : '#da251d', fontSize: '10px', fontWeight: 'bold' }}>
+            {isVietnamese ? 'Xin Xăm' : 'Omikuji'}
+        </span>
+      </div>
+
+      {/* --- MODAL HIỆN KẾT QUẢ QUẺ (ĐÃ CẬP NHẬT GIAO DIỆN VN MỚI) --- */}
+      {showLuckyDraw && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+          zIndex: 2000, backgroundColor: 'rgba(0,0,0,0.85)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          backdropFilter: 'blur(5px)'
+        }}>
+          <div style={{
+            position: 'relative', 
+            width: isVietnamese ? '90%' : '300px', 
+            maxWidth: '400px',
+            maxHeight: '85vh', 
+            overflowY: 'auto', 
+            // Nền: VN vàng nhạt (giấy điệp), JP trắng (giấy gạo)
+            backgroundColor: isVietnamese ? '#fffbe7' : '#fcfaf2', 
+            backgroundImage: isVietnamese ? 'linear-gradient(#e1e1e1 1px, transparent 1px)' : 'repeating-linear-gradient(transparent, transparent 2px, #fcfaf2 2px, #fcfaf2 4px)',
+            backgroundSize: isVietnamese ? '100% 1.5em' : 'auto', // Dòng kẻ mờ cho VN
+            borderRadius: isVietnamese ? '15px' : '2px', 
+            border: isVietnamese ? '4px double #da251d' : 'none', 
+            boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+            animation: 'zoomIn 0.3s ease-out',
+            fontFamily: isVietnamese ? 'serif' : '"Noto Serif JP", serif', 
+            color: '#333'
+          }}>
+            
+            <button onClick={() => setShowLuckyDraw(false)} style={{ position: 'absolute', top: '5px', right: '10px', background: 'transparent', border: 'none', fontSize: '24px', color: '#999', cursor: 'pointer', zIndex: 10 }}>✕</button>
+
+            {!showResult ? (
+                 /* TRẠNG THÁI LẮC (GIỮ NGUYÊN) */
+                 <div style={{padding: '30px 20px', minHeight: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+                    <div onClick={handleShake} style={{cursor: 'pointer', textAlign: 'center'}}>
+  {/* Thay emoji bằng ảnh PNG */}
+  <img 
+    src="/ongthe.png" 
+    alt="Ống xăm" 
+    style={{
+      width: '120px', // Chỉnh độ to nhỏ ở đây
+      marginBottom: '10px',
+      // Code này giúp ảnh rung lắc khi bấm:
+      animation: isShaking ? 'shake 0.5s infinite' : 'none',
+      transformOrigin: 'bottom center'
+    }} 
+  />
+  
+  <p style={{color: '#555', fontStyle: 'italic'}}>
+    {isShaking ? "Đang lắc..." : "Chạm để gieo quẻ"}
+  </p>
+</div>
+                 </div>
+            ) : (
+                /* HIỆN KẾT QUẢ */
+                isVietnamese ? (
+                    // === GIAO DIỆN VIỆT NAM (STYLE SỚ TÁO QUÂN) ===
+                    <div style={{textAlign: 'center', padding: '20px'}}>
+                         {/* Header */}
+                         <div style={{ borderBottom: '2px solid #da251d', paddingBottom: '10px', marginBottom: '15px' }}>
+                            <div style={{fontSize: '2rem', marginBottom: '5px'}}>{currentFortune.icon}</div>
+                            <h2 style={{ margin: 0, color: '#da251d', fontSize: '1.6rem', fontWeight: 'bold', textTransform: 'uppercase' }}>{currentFortune.title}</h2>
+                            <p style={{ margin: '5px 0 0', fontStyle: 'italic', fontSize: '0.9rem', color: '#666' }}>{currentFortune.subtitle}</p>
+                         </div>
+
+                         {/* Thi Kệ (Thơ) */}
+                         <div style={{ backgroundColor: '#fff0f0', padding: '15px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #ffcccc' }}>
+                             <strong style={{ color: '#da251d', display: 'block', marginBottom: '5px' }}>{currentFortune.poem_header}</strong>
+                             <p style={{ whiteSpace: 'pre-line', fontSize: '1.1rem', lineHeight: '1.6', fontStyle: 'italic', margin: 0, fontWeight: '500' }}>
+                                 {currentFortune.poem}
+                             </p>
+                         </div>
+
+                         {/* Tổng Luận */}
+                         <div style={{ textAlign: 'justify', marginBottom: '20px', fontSize: '0.95rem', lineHeight: '1.5' }}>
+                             <strong style={{ color: '#da251d', fontSize: '1.1rem' }}>{currentFortune.general_header}</strong> <br/>
+                             {currentFortune.general_content}
+                         </div>
+
+                         {/* Chi tiết từng mục (List) */}
+                         <div style={{ textAlign: 'left', fontSize: '0.9rem' }}>
+                             {currentFortune.details.map((item, idx) => (
+                                 <div key={idx} style={{ marginBottom: '8px', borderBottom: '1px dashed #ccc', paddingBottom: '5px' }}>
+                                     <span style={{ fontWeight: 'bold', color: '#da251d' }}>{item.label}: </span>
+                                     <span style={{ color: '#333' }}>{item.content}</span>
+                                 </div>
+                             ))}
+                         </div>
+
+                         {/* Lời khuyên */}
+                         <div style={{ marginTop: '20px', padding: '10px', backgroundColor: '#fff3cd', borderRadius: '5px', border: '1px solid #ffeeba', textAlign: 'justify', fontSize: '0.9rem' }}>
+                             <strong style={{ color: '#856404' }}>{currentFortune.advice_header}</strong> <br/>
+                             {currentFortune.advice_content}
+                         </div>
+                         
+                         <button onClick={handleOpenLuckyDraw} style={{marginTop: '20px', padding: '10px 30px', backgroundColor: '#da251d', color: 'white', border: 'none', borderRadius: '25px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 6px rgba(0,0,0,0.2)'}}>
+                             Xin Quẻ Khác
+                         </button>
+                    </div>
+                ) : (
+                    // === GIAO DIỆN NHẬT BẢN (OMIKUJI GỐC) ===
+                    <div style={{ padding: '30px 20px', textAlign: 'center', position: 'relative' }}>
+                        <div style={{ border: '1px solid #d32f2f', padding: '2px', display: 'inline-block', marginBottom: '15px' }}>
+                             <div style={{ border: '1px solid #d32f2f', color: '#d32f2f', fontSize: '0.8rem', padding: '2px 10px', fontWeight: 'bold' }}>
+                                 おみくじ
+                             </div>
+                        </div>
+                        <h2 style={{ fontSize: '1.8rem', margin: '0 0 10px 0', color: '#000', fontWeight: 'bold', borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
+                            {currentFortune.title_kanji}
+                        </h2>
+                        <div style={{ margin: '15px 0', padding: '0 10px' }}>
+                            <p style={{ fontSize: '0.8rem', color: '#888', margin: '0 0 5px 0' }}>{currentFortune.poem_header}</p>
+                            <p style={{ whiteSpace: 'pre-line', fontSize: '1.3rem', fontWeight: '500', lineHeight: '1.5', fontFamily: 'serif', color: '#222' }}>
+                                {currentFortune.poem_kanji}
+                            </p>
+                        </div>
+                        <div style={{ textAlign: 'left', fontSize: '0.9rem', lineHeight: '1.6', margin: '20px 0', padding: '10px', backgroundColor: '#f9f9f9' }}>
+                            <strong style={{ borderBottom: '1px solid #333' }}>{currentFortune.general_header}</strong><br/>
+                            {currentFortune.general_content}
+                        </div>
+                        <div style={{ textAlign: 'left', fontSize: '0.9rem', borderTop: '2px solid #333', paddingTop: '10px' }}>
+                             {currentFortune.details.map((item, idx) => (
+                                 <div key={idx} style={{ marginBottom: '8px', display: 'flex', alignItems: 'baseline', borderBottom: '1px dotted #ccc', paddingBottom: '4px' }}>
+                                     <span style={{ fontWeight: 'bold', minWidth: '50px', color: '#000' }}>{item.label}</span>
+                                     <span style={{ marginLeft: '10px', color: '#444' }}>{item.content}</span>
+                                 </div>
+                             ))}
+                        </div>
+                        <div style={{ marginTop: '20px', fontSize: '0.8rem', textAlign: 'left', color: '#666' }}>
+                             <strong>{currentFortune.advice_header}</strong>: {currentFortune.advice_content}
+                        </div>
+                    </div>
+                )
+            )}
+          </div>
+        </div>
+      )}
+      {/* --- CSS ANIMATIONS --- */}
+      <style>{`
+        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        @keyframes appearSlowly { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(218, 37, 29, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(218, 37, 29, 0); } 100% { box-shadow: 0 0 0 0 rgba(218, 37, 29, 0); } }
+      `}</style>
     </div>
   );
 };

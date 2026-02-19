@@ -1140,7 +1140,7 @@ const LetterToMai = ({ isVietnamese, isOpen, onClose }) => {
   
   // --- NỘI DUNG THƯ ---
   const LETTER_CONTENT = isVietnamese 
-     ? "To Bánh Khúc,\n\nManifest món quà tớ tặng cậu không bị lỗi 🙇🏻‍♂️🙏🏻\nTớ có ý tưởng làm cái này từ lúc cậu bảo cậu trao đổi một năm và không về ăn Tết được. Cảm ơn cậu vì những câu chuyện, những lời chia sẻ, lời khuyên và cả những hôm thức khuya nữa 🤣. Cảm ơn vì đã khiến những ngày rất bình thường của tớ trở nên đáng nhớ.\nHy vọng nó sẽ giúp cậu xem được pháo hoa, cảm nhận không khí giao thừa với mọi người ở Việt Nam và ngày Tết của cậu sẽ thêm vui vẻ, rộn ràng hơn.\nChúc cậu một năm mới thật hạnh phúc, tràn đầy yêu thương và điều ước của cậu sẽ thành sự thật.\nHappy New Year 2026! ❤️"
+     ? "Dự định năm 2026 của cậu là gì?\nNếu đọc được thì cậu cứ ghi vào chỗ thả đèn hoa đăng nha."
     : "Maiへ,\n\nあけましておめでとうございます。\nMaiにとって、笑顔あふれる素敵な一年になりますように。\n今年もよろしくお願いします！\n\nHappy New Year 2026! ❤️";
 
   useEffect(() => {
